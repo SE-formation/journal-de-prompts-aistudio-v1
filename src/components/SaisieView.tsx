@@ -206,7 +206,7 @@ export const SaisieView: React.FC<SaisieViewProps> = ({
     <section className="space-y-4">
       {/* Notice if webhook is not set */}
       {!webhookUrl && (
-        <div className="bg-white dark:bg-[#1f1d1a] border-2 border-[#ffd500] rounded-2xl p-4 shadow-xs flex items-center justify-between gap-3 text-xs sm:text-sm">
+        <div className="bg-white dark:bg-[#1f1d1a] border-2 border-emerald-400 rounded-2xl p-4 shadow-xs flex items-center justify-between gap-3 text-xs sm:text-sm">
           <div className="flex items-center gap-2.5 text-stone-800 dark:text-stone-200">
             <AlertCircle size={18} className="text-[#e30613] shrink-0" />
             <span>
@@ -216,7 +216,7 @@ export const SaisieView: React.FC<SaisieViewProps> = ({
           <button
             type="button"
             onClick={onGoToSettings}
-            className="px-3 py-1.5 bg-[#111111] text-[#ffd500] font-bold text-xs rounded-full shrink-0 hover:bg-stone-800 transition"
+            className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-full shrink-0 shadow-xs transition"
           >
             Réglages
           </button>
@@ -225,9 +225,9 @@ export const SaisieView: React.FC<SaisieViewProps> = ({
 
       {/* Queue notice if pending prompts */}
       {queue.length > 0 && (
-        <div className="bg-[#ffd500]/25 border border-[#ffd500] rounded-2xl p-3.5 flex items-center justify-between gap-3 text-xs sm:text-sm">
-          <div className="flex items-center gap-2 font-medium text-stone-900 dark:text-stone-100">
-            <RefreshCw size={15} className="text-[#111111] animate-spin-slow shrink-0" />
+        <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-300 dark:border-emerald-800 rounded-2xl p-3.5 flex items-center justify-between gap-3 text-xs sm:text-sm">
+          <div className="flex items-center gap-2 font-medium text-emerald-900 dark:text-emerald-200">
+            <RefreshCw size={15} className="text-emerald-600 dark:text-emerald-400 animate-spin-slow shrink-0" />
             <span>
               <strong>{queue.length} prompt{queue.length > 1 ? 's' : ''}</strong> en attente d'envoi
             </span>
@@ -235,7 +235,7 @@ export const SaisieView: React.FC<SaisieViewProps> = ({
           <button
             type="button"
             onClick={onFlushQueue}
-            className="px-3.5 py-1.5 bg-[#111111] text-white hover:bg-stone-800 font-bold text-xs rounded-full shadow-xs transition"
+            className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-full shadow-xs transition"
           >
             Renvoyer
           </button>
@@ -258,7 +258,7 @@ export const SaisieView: React.FC<SaisieViewProps> = ({
                   onClick={() => setSelectedTool(tool)}
                   className={`min-h-[40px] px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all duration-150 ${
                     isSelected
-                      ? 'bg-[#111111] text-white border-[#111111] shadow-xs scale-102 font-bold'
+                      ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs scale-102 font-bold'
                       : 'bg-white dark:bg-[#201d1a] text-stone-800 dark:text-stone-200 border-stone-300 dark:border-stone-700 hover:border-stone-400'
                   }`}
                   aria-pressed={isSelected}
@@ -365,16 +365,16 @@ export const SaisieView: React.FC<SaisieViewProps> = ({
               <button
                 type="button"
                 onClick={handlePaste}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#f6f4f0] dark:bg-[#2c2824] hover:bg-stone-200 text-stone-700 dark:text-stone-200 text-xs font-semibold transition"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 border border-emerald-300/80 dark:border-emerald-800/80 text-xs font-bold transition shadow-2xs"
               >
-                <Clipboard size={13} />
+                <Clipboard size={13} className="text-emerald-600 dark:text-emerald-400" />
                 <span>Coller</span>
               </button>
               {prompt && (
                 <button
                   type="button"
                   onClick={handleClear}
-                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-stone-100 dark:bg-stone-800/80 hover:bg-stone-200 text-stone-500 text-xs font-semibold transition"
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-stone-100 dark:bg-stone-800/80 hover:bg-red-50 hover:text-red-600 text-stone-500 text-xs font-semibold transition"
                   title="Effacer"
                 >
                   <Trash2 size={13} />
@@ -393,16 +393,16 @@ export const SaisieView: React.FC<SaisieViewProps> = ({
         <button
           type="submit"
           disabled={isSending || !prompt.trim()}
-          className="w-full min-h-[54px] rounded-full bg-[#111111] hover:bg-stone-800 active:scale-[0.99] disabled:opacity-40 disabled:pointer-events-none text-white font-display font-extrabold text-base tracking-tight shadow-md flex items-center justify-center gap-2 transition"
+          className="w-full min-h-[54px] rounded-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 active:scale-[0.99] disabled:opacity-40 disabled:pointer-events-none text-white font-display font-extrabold text-base tracking-tight shadow-md shadow-emerald-700/25 flex items-center justify-center gap-2 transition cursor-pointer"
         >
           {isSending ? (
             <>
-              <RefreshCw size={18} className="animate-spin text-[#ffd500]" />
+              <RefreshCw size={18} className="animate-spin text-white" />
               <span>Envoi vers Make…</span>
             </>
           ) : (
             <>
-              <Send size={18} className="text-[#ffd500]" />
+              <Send size={18} className="text-emerald-100" />
               <span>Enregistrer dans mon journal</span>
             </>
           )}
