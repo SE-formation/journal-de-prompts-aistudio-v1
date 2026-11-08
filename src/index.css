@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Bricolage Grotesque", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  --color-brand-red: #e30613;
+  --color-brand-orange: #f39200;
+  --color-brand-yellow: #ffd500;
+  --color-brand-ink: #111111;
+}
+
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+body {
+  font-family: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  background-color: #f6f4f0;
+  color: #111111;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.font-display {
+  font-family: "Bricolage Grotesque", "Arial Rounded MT Bold", system-ui, sans-serif;
+}
+
+.font-mono {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}

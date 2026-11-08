@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Journal de prompts</title>
+<meta name="description" content="Saisir et dater ses prompts IA pour l'annexe du PPI ou du PPC (MSDI, IFC).">
+<meta name="theme-color" content="#e30613">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Prompts">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono&display=swap">
+<style>
+/* Direction « Pastilles » — charte IFC : rouge #e30613, orange #f39200, jaune #ffd500, noir #111111.
+   Mise en page : en-tête rouge arrondi, choix en pastilles, carte blanche pour le prompt, navigation en pilules. */
+:root{
+  --bg:#f6f4f0; --surface:#ffffff; --fg:#111111; --muted:#5f5b54; --line:#d8d4cc; --soft:#eeeae3;
+  --red:#e30613; --red-fg:#ffffff; --orange:#f39200; --yellow:#ffd500; --ink:#111111; --ink-fg:#ffffff;
+  --ok-bg:#e3f1e8; --ok-fg:#145c34; --err:#b3261e;
+  --f-display:"Bricolage Grotesque","Arial Rounded MT Bold",system-ui,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#151412; --surface:#22201d; --fg:#f2efe9; --muted:#aaa59b; --line:#3d3a34; --soft:#2d2a26;
+  --red:#d10512; --ink:#f2efe9; --ink-fg:#111111;
+  --ok-bg:#16382a; --ok-fg:#8fdcae; --err:#ff8a80; color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 var(--f-body);-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,select:focus,input:focus,textarea:focus,a:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+
+header{background:var(--red);color:var(--red-fg);border-radius:0 0 24px 24px;
+  padding:calc(env(safe-area-inset-top,0px) + 16px) 20px 18px;display:grid;gap:10px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+header h1{font:800 1.5rem/1.1 var(--f-display);letter-spacing:-.02em;margin:0}
+.ep{display:flex;background:rgba(255,255,255,.2);border-radius:999px;padding:3px}
+.ep button{border:0;background:transparent;color:#fff;font-weight:600;font-size:.85rem;padding:6px 12px;border-radius:999px;min-height:34px}
+.ep button[aria-pressed="true"]{background:var(--yellow);color:#111}
+.tagline{font-size:.92rem;opacity:.92;margin:0}
+#net{font-size:.78rem;font-weight:600;background:#111;color:var(--yellow);padding:3px 8px;border-radius:999px}
+
+main{max-width:560px;margin:0 auto;padding:18px 20px calc(96px + env(safe-area-inset-bottom,0px))}
+[hidden]{display:none!important}
+.form{display:grid;gap:16px}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend,.lbl{font-weight:600;font-size:.9rem;padding:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:0 16px;min-height:42px;font-size:.92rem}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--ink-fg);border-color:var(--ink);font-weight:600}
+#partieChips .chip[aria-pressed="true"]{background:var(--orange);border-color:var(--orange);color:#111}
+label{display:grid;gap:6px;font-weight:600;font-size:.9rem}
+select,input[type=text],input[type=url],input[type=search]{font:inherit;font-weight:400;font-size:1rem;color:var(--fg);background:var(--surface);
+  border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;width:100%;min-height:48px}
+
+.card{background:var(--surface);border-radius:20px;padding:14px 16px;display:grid;gap:8px;box-shadow:0 1px 0 var(--soft)}
+.card input{border:0;border-bottom:1.5px solid var(--soft);border-radius:0;padding:4px 0 10px;font-weight:600;background:transparent;min-height:0}
+.card textarea{border:0;background:transparent;color:var(--fg);font:400 .86rem/1.55 var(--f-mono);min-height:190px;resize:vertical;padding:0}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.soft-btn{border:0;background:var(--bg);border-radius:999px;padding:0 14px;min-height:40px;font-weight:600;font-size:.88rem}
+.counter{font:400 .75rem var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+
+.primary{border:0;width:100%;background:var(--ink);color:var(--ink-fg);border-radius:999px;min-height:56px;font:800 1.06rem var(--f-display)}
+.primary:disabled{opacity:.5}
+.notice{background:var(--surface);border-radius:16px;padding:12px 16px;font-size:.92rem;box-shadow:inset 0 0 0 2px var(--yellow)}
+.queue{display:flex;justify-content:space-between;align-items:center;gap:10px}
+
+h2{font:800 1.4rem/1.15 var(--f-display);margin:0}
+.eyebrow{font-weight:600;font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.item{background:var(--surface);border-radius:20px;padding:16px;display:grid;gap:8px;min-width:0}
+.item.wait{box-shadow:inset 0 0 0 2px var(--yellow)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.badge{font-weight:600;font-size:.75rem;padding:4px 10px;border-radius:999px}
+.badge.sent{background:var(--ok-bg);color:var(--ok-fg)} .badge.wait{background:var(--yellow);color:#111}
+.item .obj{font:800 1.05rem/1.25 var(--f-display)}
+.item .txt{font:400 .8rem/1.5 var(--f-mono);white-space:pre-wrap;overflow-wrap:anywhere;max-height:6em;overflow:hidden;margin:0}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.empty{color:var(--muted);text-align:center;padding:32px 8px}
+.help{font-size:.9rem;color:var(--muted)} .help p{margin:0 0 8px} .help code{font-family:var(--f-mono);font-size:.8rem;overflow-wrap:anywhere}
+.ghost{border:1.5px solid var(--line);background:transparent;border-radius:999px;padding:0 16px;min-height:44px;font-weight:600}
+
+nav{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--bg);display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+  padding:6px 12px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--soft)}
+nav button{border:0;background:transparent;border-radius:999px;padding:12px 4px;font-weight:600;font-size:.9rem;color:var(--muted)}
+nav button[aria-current="page"]{background:var(--ink);color:var(--ink-fg)}
+
+#toast{position:fixed;left:16px;right:16px;bottom:calc(80px + env(safe-area-inset-bottom,0px));z-index:9;max-width:520px;margin:0 auto;
+  background:var(--ink);color:var(--ink-fg);padding:14px 18px;border-radius:18px;font-weight:600;
+  transform:translateY(16px);opacity:0;transition:.2s;pointer-events:none}
+#toast.show{transform:none;opacity:1}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <h1 id="title">Mes prompts</h1>
+    <div class="ep" role="group" aria-label="Épreuve">
+      <button type="button" data-ep="PPI" aria-pressed="true">PPI</button>
+      <button type="button" data-ep="PPC" aria-pressed="false">PPC</button>
+    </div>
+  </div>
+  <p class="tagline">Un prompt utile ? Gardez-en la trace pour votre annexe. <span id="net" hidden>hors ligne</span></p>
+</header>
+
+<main>
+  <!-- ÉCRAN 1 : SAISIE -->
+  <section id="view-saisir">
+    <form id="form" class="form" novalidate>
+      <div id="setupNotice" class="notice" hidden>Avant le premier envoi, collez votre adresse d'envoi Make dans <b>Réglages</b>.</div>
+      <div id="queueNotice" class="notice queue" hidden>
+        <span id="queueText"></span>
+        <button class="soft-btn" id="btnRetry" type="button">Renvoyer</button>
+      </div>
+
+      <fieldset>
+        <legend>Outil IA</legend>
+        <div class="chips" id="outilChips"></div>
+        <input type="hidden" id="outil">
+      </fieldset>
+
+      <fieldset>
+        <legend>Partie du dossier</legend>
+        <div class="chips" id="partieChips"></div>
+        <input type="hidden" id="partie">
+      </fieldset>
+
+      <label for="etape">Étape
+        <select id="etape" required></select>
+      </label>
+
+      <div class="card">
+        <input id="objectif" type="text" maxlength="300" aria-label="Objectif du prompt" placeholder="Objectif : ex. reformuler ma problématique" autocomplete="off">
+        <textarea id="prompt" required aria-label="Prompt" placeholder="Collez ici le prompt tel que vous l'avez envoyé à l'IA."></textarea>
+        <div class="card-foot">
+          <div style="display:flex;gap:8px">
+            <button class="soft-btn" type="button" id="btnPaste">Coller</button>
+            <button class="soft-btn" type="button" id="btnClear">Effacer</button>
+          </div>
+          <span class="counter" id="counter">0 car.</span>
+        </div>
+      </div>
+
+      <button class="primary" id="btnSend" type="submit">Enregistrer</button>
+    </form>
+  </section>
+
+  <!-- ÉCRAN 2 : HISTORIQUE -->
+  <section id="view-historique" hidden>
+    <div class="form">
+      <input id="search" type="search" aria-label="Rechercher un prompt" placeholder="Rechercher : PESTEL, CRM, problématique…" autocomplete="off">
+      <span class="eyebrow" id="histCount"></span>
+      <ul class="list" id="list"></ul>
+    </div>
+  </section>
+
+  <!-- ÉCRAN 3 : RÉGLAGES -->
+  <section id="view-reglages" hidden>
+    <div class="form">
+      <h2>Réglages</h2>
+      <p class="help" style="margin:0">Ces réglages restent sur ce téléphone. Les prompts ne partent que vers votre propre scénario Make.</p>
+      <label for="hook">Adresse d'envoi (webhook Make)
+        <input id="hook" type="url" inputmode="url" placeholder="https://hook.eu1.make.com/…" autocomplete="off" spellcheck="false">
+      </label>
+      <label for="defEp">Épreuve par défaut
+        <select id="defEp"><option>PPI</option><option>PPC</option></select>
+      </label>
+      <button class="primary" type="button" id="btnSave">Enregistrer les réglages</button>
+      <div class="help">
+        <p><b>Lien pré-rempli :</b> <code id="exLink">…/?hook=ADRESSE</code> enregistre l'adresse d'envoi à la première ouverture.</p>
+        <p><b>Android :</b> une fois l'appli installée, sélectionnez un texte dans ChatGPT, Claude ou Gemini › <b>Partager</b> › <b>Prompts</b>.</p>
+        <p><b>iPhone :</b> copiez le prompt, ouvrez l'appli, touchez <b>Coller</b>.</p>
+      </div>
+      <button class="ghost" type="button" id="btnWipe">Vider l'historique local</button>
+      <p class="help" id="version"></p>
+    </div>
+  </section>
+</main>
+
+<nav aria-label="Navigation">
+  <button type="button" data-view="saisir" aria-current="page">Saisir</button>
+  <button type="button" data-view="historique">Historique</button>
+  <button type="button" data-view="reglages">Réglages</button>
+</nav>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>

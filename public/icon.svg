@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="112" fill="#e30613"/>
+  <!-- Speech bubble -->
+  <path d="M120 220 C120 140 180 90 260 90 C340 90 400 140 400 220 C400 300 340 350 260 350 C235 350 210 342 190 330 L135 365 C125 372 115 362 120 350 L128 318 C122 300 120 282 120 260 Z" fill="#ffffff"/>
+  <!-- Prompt chevron > -->
+  <path d="M185 180 L235 220 L185 260" stroke="#e30613" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Terminal cursor _ -->
+  <path d="M260 260 L325 260" stroke="#ffd500" stroke-width="24" stroke-linecap="round" fill="none"/>
+  <!-- Small spark -->
+  <circle cx="395" cy="115" r="32" fill="#ffd500"/>
+</svg>

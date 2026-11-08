@@ -1,0 +1,6 @@
+{
+  "name": "Journal de Prompts PPI / PPC",
+  "description": "Application mobile PWA pour consigner et dater ses prompts IA vers Make et Google Sheets pour les annexes PPI et PPC.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
